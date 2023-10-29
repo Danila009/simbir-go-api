@@ -13,7 +13,7 @@ import ru.volga_it.simbir_go.features.rent.entities.RentTransportType;
 import ru.volga_it.simbir_go.features.rent.mappers.RentTransportDetailsUserMapper;
 import ru.volga_it.simbir_go.features.rent.mappers.RentTransportMapper;
 import ru.volga_it.simbir_go.features.rent.services.RentTransportService;
-import ru.volga_it.simbir_go.features.transport.dto.GetTransportsRequestParams;
+import ru.volga_it.simbir_go.features.transport.dto.params.GetTransportsRequestParams;
 import ru.volga_it.simbir_go.features.transport.dto.TransportDto;
 import ru.volga_it.simbir_go.features.transport.entities.TransportType;
 import ru.volga_it.simbir_go.features.transport.mappers.TransportMapper;

@@ -3,6 +3,7 @@ package ru.volga_it.simbir_go.features.account.entities;
 import jakarta.persistence.*;
 import lombok.Data;
 import ru.volga_it.simbir_go.features.rent.entities.RentTransportEntity;
+import ru.volga_it.simbir_go.features.transport.entities.TransportEntity;
 
 import java.util.Collection;
 
@@ -21,4 +22,7 @@ public class UserEntity {
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     private Collection<RentTransportEntity> rentTransports;
+
+    @OneToMany(mappedBy = "owner", fetch = FetchType.LAZY)
+    private Collection<TransportEntity> ownerTransports;
 }

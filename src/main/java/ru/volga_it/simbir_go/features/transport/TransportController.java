@@ -1,5 +1,6 @@
 package ru.volga_it.simbir_go.features.transport;
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -7,7 +8,9 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.volga_it.simbir_go.common.validation.OnCreate;
 import ru.volga_it.simbir_go.common.validation.OnUpdate;
+import ru.volga_it.simbir_go.features.account.services.security.UserSecurityService;
 import ru.volga_it.simbir_go.features.transport.dto.TransportDto;
+import ru.volga_it.simbir_go.features.transport.dto.params.UpdateTransportParams;
 import ru.volga_it.simbir_go.features.transport.mappers.TransportMapper;
 import ru.volga_it.simbir_go.features.transport.services.TransportService;
 
@@ -20,6 +23,8 @@ import java.util.List;
 public class TransportController {
 
     private final TransportService transportService;
+    private final UserSecurityService userSecurityService;
+
     private final TransportMapper transportMapper;
 
     @GetMapping
@@ -30,17 +35,19 @@ public class TransportController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    private Long add(@Validated(OnCreate.class) @RequestBody TransportDto transportDto) {
-        return transportService.add(transportMapper.toEntity(transportDto));
+    @SecurityRequirement(name = "bearerAuth")
+    private TransportDto add(@Validated(OnCreate.class) @RequestBody TransportDto transportDto) {
+        Long userId = userSecurityService.getUserIdByAuthentication();
+        return transportMapper.toDto(transportService.add(userId, transportMapper.toEntity(transportDto)));
     }
 
     @PutMapping("{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     private void update(
             @PathVariable Long id,
-            @Validated(OnUpdate.class) @RequestBody TransportDto transportDto
+            @Validated(OnUpdate.class) @RequestBody UpdateTransportParams params
     ) {
-        transportService.update(id, transportMapper.toEntity(transportDto));
+        transportService.update(id, params);
     }
 
     @DeleteMapping("{id}")

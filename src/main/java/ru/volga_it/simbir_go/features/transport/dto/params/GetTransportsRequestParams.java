@@ -1,4 +1,4 @@
-package ru.volga_it.simbir_go.features.transport.dto;
+package ru.volga_it.simbir_go.features.transport.dto.params;
 
 import lombok.Data;
 import ru.volga_it.simbir_go.features.transport.entities.TransportType;

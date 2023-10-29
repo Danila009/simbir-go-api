@@ -2,6 +2,7 @@ package ru.volga_it.simbir_go.features.transport.entities;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import ru.volga_it.simbir_go.features.account.entities.UserEntity;
 import ru.volga_it.simbir_go.features.rent.entities.RentTransportEntity;
 
 import java.util.Collection;
@@ -29,6 +30,10 @@ public class TransportEntity {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "type_id")
     private TransportTypeEntity typeEntity;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "owner_id")
+    private UserEntity owner;
 
     @OneToMany(mappedBy = "transport", fetch = FetchType.LAZY)
     private Collection<RentTransportEntity> rentTransports;

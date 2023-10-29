@@ -95,7 +95,6 @@ public class RentTransportController {
             @RequestParam(name = "lat") Double latitude,
             @RequestParam(name = "long") Double longitude
     ) {
-        Long userId = userSecurityService.getUserIdByAuthentication();
-        return rentTransportMapper.toDto(rentTransportService.userEnd(latitude, longitude, userId, rentId));
+        return rentTransportMapper.toDto(rentTransportService.userEnd(latitude, longitude, rentId));
     }
 }

@@ -7,13 +7,13 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.volga_it.simbir_go.common.exceptions.ResourceNotFoundException;
 import ru.volga_it.simbir_go.features.account.entities.UserEntity;
 import ru.volga_it.simbir_go.features.account.services.UserService;
+import ru.volga_it.simbir_go.features.rent.dto.params.CreateOrUpdateRentTransportParams;
 import ru.volga_it.simbir_go.features.rent.entities.RentTransportEntity;
 import ru.volga_it.simbir_go.features.rent.entities.RentTransportType;
 import ru.volga_it.simbir_go.features.rent.entities.RentTransportTypeEntity;
 import ru.volga_it.simbir_go.features.rent.repositories.RentTransportRepository;
 import ru.volga_it.simbir_go.features.rent.services.type.RentTransportTypeService;
 import ru.volga_it.simbir_go.features.transport.entities.TransportEntity;
-import ru.volga_it.simbir_go.features.transport.entities.TransportType;
 import ru.volga_it.simbir_go.features.transport.services.TransportService;
 
 import java.time.LocalDateTime;
@@ -61,6 +61,24 @@ public class RentTransportServiceImpl implements RentTransportService {
     }
 
     @Override
+    public RentTransportEntity add(CreateOrUpdateRentTransportParams params) {
+        RentTransportEntity rent = new RentTransportEntity();
+        TransportEntity transport = transportService.getById(params.transportId());
+        UserEntity user = userService.getById(params.userId());
+        RentTransportTypeEntity type = rentTransportTypeService.getByType(params.type());
+
+        rent.setTransport(transport);
+        rent.setUser(user);
+        rent.setTimeStart(params.timeStart());
+        rent.setTimeEnd(params.timeEnd());
+        rent.setPriceOfUnit(params.priceOfUnit());
+        rent.setTransportType(type);
+        rent.setFinalPrice(params.finalPrice());
+
+        return rentTransportRepository.save(rent);
+    }
+
+    @Override
     @SneakyThrows
     @Transactional
     public RentTransportEntity userNew(RentTransportType type, Long userId, Long transportId) {
@@ -88,9 +106,9 @@ public class RentTransportServiceImpl implements RentTransportService {
     @Override
     @SneakyThrows
     @Transactional
-    public RentTransportEntity userEnd(Double latitude, Double longitude, Long userId, Long rentId) {
+    public RentTransportEntity userEnd(Double latitude, Double longitude, Long rentId) {
         RentTransportEntity rent = getById(rentId);
-        if(Objects.equals(rent.getUser().getId(), userId)) throw new Exception("Only the user who created this lease");
+        if(rent.getTransport().getCanBeRented()) throw new Exception("Rental of transport is completed");
 
         rent.setTimeEnd(LocalDateTime.now());
 
@@ -106,5 +124,30 @@ public class RentTransportServiceImpl implements RentTransportService {
         rent.getTransport().setCanBeRented(true);
 
         return rentTransportRepository.save(rent);
+    }
+
+    @Override
+    @Transactional
+    public void update(Long id, CreateOrUpdateRentTransportParams params) {
+        RentTransportEntity rent = getById(id);
+        TransportEntity transport = transportService.getById(params.transportId());
+        UserEntity user = userService.getById(params.userId());
+        RentTransportTypeEntity type = rentTransportTypeService.getByType(params.type());
+
+        rent.setTransport(transport);
+        rent.setUser(user);
+        rent.setTimeStart(params.timeStart());
+        rent.setTimeEnd(params.timeEnd());
+        rent.setPriceOfUnit(params.priceOfUnit());
+        rent.setTransportType(type);
+        rent.setFinalPrice(params.finalPrice());
+
+        rentTransportRepository.save(rent);
+    }
+
+    @Override
+    @Transactional
+    public void deleteById(Long id) {
+        rentTransportRepository.deleteById(id);
     }
 }

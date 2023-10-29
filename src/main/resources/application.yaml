@@ -1,0 +1,9 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/simbir_go
+    username: postgres
+    password: ggtt1234
+security:
+  jwt:
+    secret: c2Zqa3NkamZranNkbGtqZmtsc2pka2ZqdmJjeHZic2JkZmJzamtkZA==
+    access: 1

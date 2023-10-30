@@ -15,6 +15,7 @@ public class UserEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String username;
+    @Column(name = "password_hash")
     private String password;
     private Double balance;
     @Column(name = "is_admin")

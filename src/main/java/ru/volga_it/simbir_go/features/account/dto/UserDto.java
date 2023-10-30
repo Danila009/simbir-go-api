@@ -12,10 +12,6 @@ public record UserDto(
         @NotNull(message = "username must be not null", groups = {OnCreate.class, OnUpdate.class})
         @Length(max = 64, message = "username must be smaller than 30 symbols", groups = {OnCreate.class, OnUpdate.class})
         String username,
-        @Schema(accessMode = Schema.AccessMode.WRITE_ONLY)
-        @NotNull(message = "password must be not null", groups = {OnCreate.class, OnUpdate.class})
-        @Length(max = 64, message = "password must be smaller than 30 symbols", groups = {OnCreate.class, OnUpdate.class})
-        String password,
         @Schema(accessMode = Schema.AccessMode.READ_ONLY)
         Double balance,
         @Schema(accessMode = Schema.AccessMode.READ_ONLY)

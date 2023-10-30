@@ -10,7 +10,7 @@ import ru.volga_it.simbir_go.common.exceptions.ForbiddenException;
 import ru.volga_it.simbir_go.common.validation.OnCreate;
 import ru.volga_it.simbir_go.common.validation.OnUpdate;
 import ru.volga_it.simbir_go.features.account.services.security.UserSecurityService;
-import ru.volga_it.simbir_go.features.security.expressions.CustomSecurityExpression;
+import ru.volga_it.simbir_go.common.security.expressions.CustomSecurityExpression;
 import ru.volga_it.simbir_go.features.transport.dto.TransportDto;
 import ru.volga_it.simbir_go.features.transport.dto.params.UpdateTransportParams;
 import ru.volga_it.simbir_go.features.transport.mappers.TransportMapper;

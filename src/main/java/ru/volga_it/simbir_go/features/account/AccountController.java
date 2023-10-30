@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import ru.volga_it.simbir_go.common.validation.OnCreate;
 import ru.volga_it.simbir_go.common.validation.OnUpdate;
 import ru.volga_it.simbir_go.features.account.dto.UserDto;
+import ru.volga_it.simbir_go.features.account.dto.params.UpdateUserParams;
 import ru.volga_it.simbir_go.features.account.dto.security.JwtRequestDto;
 import ru.volga_it.simbir_go.features.account.dto.security.JwtResponseDto;
 import ru.volga_it.simbir_go.features.account.mappers.UserMapper;
@@ -48,8 +49,8 @@ public class AccountController {
     @PutMapping
     @ResponseStatus(HttpStatus.OK)
     @SecurityRequirement(name = "bearerAuth")
-    private void update(@Validated(OnUpdate.class) @RequestBody UserDto userDto) {
+    private void update(@Validated(OnUpdate.class) @RequestBody UpdateUserParams params) {
         Long userId = userSecurityService.getUserIdByAuthentication();
-        userService.update(userId, userMapper.toEntity(userDto));
+        userService.update(userId, params);
     }
 }

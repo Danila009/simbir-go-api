@@ -3,10 +3,13 @@ package ru.volga_it.simbir_go.features.account.services;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.volga_it.simbir_go.common.exceptions.BadRequestException;
 import ru.volga_it.simbir_go.common.exceptions.ResourceNotFoundException;
+import ru.volga_it.simbir_go.features.account.dto.admin.AdminUpdateUserParams;
+import ru.volga_it.simbir_go.features.account.dto.params.UpdateUserParams;
 import ru.volga_it.simbir_go.features.account.entities.UserEntity;
 import ru.volga_it.simbir_go.features.account.repositories.UserRepository;
 
@@ -15,6 +18,7 @@ import ru.volga_it.simbir_go.features.account.repositories.UserRepository;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     @Transactional(readOnly = true)
@@ -42,16 +46,35 @@ public class UserServiceImpl implements UserService {
         if(userRepository.findByUsername(user.getUsername()).isPresent())
             throw new BadRequestException("Username is busy");
 
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+
         return userRepository.save(user);
     }
 
     @Override
     @Transactional
-    public void update(Long id, UserEntity updatedUser) {
-        // Check user not found by id
-        getById(id);
-        updatedUser.setId(id);
-        userRepository.save(updatedUser);
+    public void update(Long id, AdminUpdateUserParams params) {
+        if(userRepository.findByUsername(params.username()).isPresent())
+            throw new BadRequestException("Username is busy");
+
+        UserEntity user = getById(id);
+        user.setPassword(passwordEncoder.encode(params.password()));
+        user.setUsername(params.username());
+        user.setIsAdmin(params.isAdmin());
+        user.setBalance(params.balance());
+
+        userRepository.save(user);
+    }
+
+    @Override
+    @Transactional
+    public void update(Long id, UpdateUserParams params) {
+        if(userRepository.findByUsername(params.username()).isPresent())
+            throw new BadRequestException("Username is busy");
+
+        UserEntity user = getById(id);
+        user.setUsername(params.username());
+        user.setPassword(passwordEncoder.encode(params.password()));
     }
 
     @Override

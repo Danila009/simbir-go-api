@@ -14,7 +14,7 @@ import ru.volga_it.simbir_go.features.rent.dto.RentTransportDto;
 import ru.volga_it.simbir_go.features.rent.dto.params.CreateOrUpdateRentTransportParams;
 import ru.volga_it.simbir_go.features.rent.mappers.RentTransportMapper;
 import ru.volga_it.simbir_go.features.rent.services.RentTransportService;
-import ru.volga_it.simbir_go.features.security.expressions.CustomSecurityExpression;
+import ru.volga_it.simbir_go.common.security.expressions.CustomSecurityExpression;
 
 import java.util.List;
 

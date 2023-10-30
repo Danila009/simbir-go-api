@@ -1,4 +1,4 @@
-package ru.volga_it.simbir_go.features.security;
+package ru.volga_it.simbir_go.features.account.security;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

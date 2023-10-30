@@ -2,7 +2,7 @@ package ru.volga_it.simbir_go.features.account.services.security;
 
 import ru.volga_it.simbir_go.features.account.dto.security.JwtRequestDto;
 import ru.volga_it.simbir_go.features.account.dto.security.JwtResponseDto;
-import ru.volga_it.simbir_go.features.security.JwtEntity;
+import ru.volga_it.simbir_go.features.account.security.JwtEntity;
 
 public interface UserSecurityService {
 

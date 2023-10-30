@@ -16,12 +16,13 @@ import ru.volga_it.simbir_go.common.validation.OnUpdate;
 import ru.volga_it.simbir_go.features.account.dto.UserDto;
 import ru.volga_it.simbir_go.features.account.dto.UserShortDto;
 import ru.volga_it.simbir_go.features.account.dto.admin.AdminCreateOrUpdateUserRequestBody;
+import ru.volga_it.simbir_go.features.account.dto.admin.AdminUpdateUserParams;
 import ru.volga_it.simbir_go.features.account.entities.UserEntity;
 import ru.volga_it.simbir_go.features.account.mappers.UserMapper;
 import ru.volga_it.simbir_go.features.account.mappers.UserShortMapper;
 import ru.volga_it.simbir_go.features.account.mappers.admin.AdminCreateOrUpdateUserRequestBodyMapper;
 import ru.volga_it.simbir_go.features.account.services.UserService;
-import ru.volga_it.simbir_go.features.security.expressions.CustomSecurityExpression;
+import ru.volga_it.simbir_go.common.security.expressions.CustomSecurityExpression;
 
 @Valid
 @RestController
@@ -74,12 +75,11 @@ public class AdminAccountController {
     @SecurityRequirement(name = "bearerAuth")
     private void update(
             @PathVariable Long id,
-            @Validated(OnUpdate.class) @RequestBody AdminCreateOrUpdateUserRequestBody body
+            @Validated(OnUpdate.class) @RequestBody AdminUpdateUserParams params
     ) {
         if(!customSecurityExpression.hasIsAdmin()) throw new ForbiddenException("user is not an admin");
 
-        UserEntity user = adminCreateOrUpdateUserRequestBodyMapper.toEntity(body);
-        userService.update(id, user);
+        userService.update(id, params);
     }
 
     @DeleteMapping("{id}")

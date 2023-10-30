@@ -1,4 +1,4 @@
-package ru.volga_it.simbir_go.features.security.props;
+package ru.volga_it.simbir_go.features.account.security.props;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;

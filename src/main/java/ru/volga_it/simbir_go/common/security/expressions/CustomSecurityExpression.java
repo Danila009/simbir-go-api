@@ -1,11 +1,11 @@
-package ru.volga_it.simbir_go.features.security.expressions;
+package ru.volga_it.simbir_go.common.security.expressions;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import ru.volga_it.simbir_go.features.account.security.JwtEntity;
 import ru.volga_it.simbir_go.features.account.services.security.UserSecurityService;
 import ru.volga_it.simbir_go.features.rent.entities.RentTransportEntity;
 import ru.volga_it.simbir_go.features.rent.services.RentTransportService;
-import ru.volga_it.simbir_go.features.security.JwtEntity;
 import ru.volga_it.simbir_go.features.transport.entities.TransportEntity;
 import ru.volga_it.simbir_go.features.transport.services.TransportService;
 

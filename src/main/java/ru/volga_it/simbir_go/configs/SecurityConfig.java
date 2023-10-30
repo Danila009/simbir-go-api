@@ -10,8 +10,8 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import ru.volga_it.simbir_go.features.security.JwtTokenFilter;
-import ru.volga_it.simbir_go.features.security.JwtTokenProvider;
+import ru.volga_it.simbir_go.features.account.security.JwtTokenFilter;
+import ru.volga_it.simbir_go.features.account.security.JwtTokenProvider;
 
 @Configuration
 @EnableWebSecurity

@@ -7,7 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import ru.volga_it.simbir_go.common.exceptions.ForbiddenException;
 import ru.volga_it.simbir_go.features.account.services.UserService;
-import ru.volga_it.simbir_go.features.security.expressions.CustomSecurityExpression;
+import ru.volga_it.simbir_go.common.security.expressions.CustomSecurityExpression;
 
 @Valid
 @RestController

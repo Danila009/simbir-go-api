@@ -1,4 +1,4 @@
-package ru.volga_it.simbir_go.features.security;
+package ru.volga_it.simbir_go.features.account.security;
 
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
@@ -9,7 +9,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
-import ru.volga_it.simbir_go.features.security.props.JwtProperties;
+import ru.volga_it.simbir_go.features.account.security.props.JwtProperties;
 
 import java.security.Key;
 import java.time.Instant;

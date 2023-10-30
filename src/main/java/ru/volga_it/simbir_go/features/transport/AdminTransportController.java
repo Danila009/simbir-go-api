@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import ru.volga_it.simbir_go.common.dto.PageDto;
 import ru.volga_it.simbir_go.common.exceptions.ForbiddenException;
 import ru.volga_it.simbir_go.common.validation.OnUpdate;
-import ru.volga_it.simbir_go.features.security.expressions.CustomSecurityExpression;
+import ru.volga_it.simbir_go.common.security.expressions.CustomSecurityExpression;
 import ru.volga_it.simbir_go.features.transport.dto.TransportDetailsDto;
 import ru.volga_it.simbir_go.features.transport.dto.TransportDto;
 import ru.volga_it.simbir_go.features.transport.dto.params.TransportTypeRequestParam;

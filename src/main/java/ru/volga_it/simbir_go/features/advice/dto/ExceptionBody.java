@@ -9,5 +9,4 @@ public class ExceptionBody {
 
     private String message;
     private String code;
-
 }

@@ -6,6 +6,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.volga_it.simbir_go.common.exceptions.BadRequestException;
 import ru.volga_it.simbir_go.common.exceptions.ResourceNotFoundException;
 import ru.volga_it.simbir_go.features.account.entities.UserEntity;
 import ru.volga_it.simbir_go.features.account.services.UserService;
@@ -72,6 +73,9 @@ public class TransportServiceImpl implements TransportService {
     public TransportEntity add(Long ownerId, TransportEntity transport) {
         TransportTypeEntity transportType = transportTypeService.getByType(transport.getTypeEntity().getType());
         UserEntity owner = userService.getById(ownerId);
+
+        if(transportRepository.findByIdentifier(transport.getIdentifier()).isPresent())
+            throw new BadRequestException("Identifier is busy");
 
         transport.setTypeEntity(transportType);
         transport.setOwner(owner);

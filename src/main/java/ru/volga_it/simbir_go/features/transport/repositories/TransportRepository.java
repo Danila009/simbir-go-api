@@ -7,8 +7,12 @@ import org.springframework.data.jpa.repository.Query;
 import ru.volga_it.simbir_go.features.transport.entities.TransportEntity;
 import ru.volga_it.simbir_go.features.transport.entities.TransportType;
 
+import java.util.Optional;
+
 public interface TransportRepository extends JpaRepository<TransportEntity, Long> {
 
     @Query("SELECT t FROM transports t WHERE t.typeEntity.type = ?1")
     Page<TransportEntity> findAllByType(TransportType type, Pageable pageable);
+
+    Optional<TransportEntity> findByIdentifier(String identifier);
 }

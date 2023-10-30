@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import ru.volga_it.simbir_go.common.validation.OnCreate;
 import ru.volga_it.simbir_go.common.validation.OnUpdate;
 import ru.volga_it.simbir_go.features.account.dto.UserDto;
 import ru.volga_it.simbir_go.features.account.dto.security.JwtRequestDto;
@@ -34,13 +35,13 @@ public class AccountController {
 
     @PostMapping("SignIn")
     @ResponseStatus(HttpStatus.CREATED)
-    private JwtResponseDto login(@RequestBody JwtRequestDto dto) {
+    private JwtResponseDto login(@Validated(OnCreate.class) @RequestBody JwtRequestDto dto) {
         return userSecurityService.login(dto);
     }
 
     @PostMapping("SignUp")
     @ResponseStatus(HttpStatus.CREATED)
-    private JwtResponseDto registration(@RequestBody JwtRequestDto dto) {
+    private JwtResponseDto registration(@Validated(OnCreate.class) @RequestBody JwtRequestDto dto) {
         return userSecurityService.registration(dto);
     }
 

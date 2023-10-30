@@ -39,8 +39,8 @@ CREATE TABLE transports
     CONSTRAINT PK_transports__key PRIMARY KEY(id),
     CONSTRAINT FK_transports__type FOREIGN KEY(type_id) REFERENCES transport_types(id),
     CONSTRAINT FK_transports__owner FOREIGN KEY(owner_id) REFERENCES users(id),
-    CONSTRAINT CK_transports__minute_price CHECK(minute_price>0),
-    CONSTRAINT CK_transports__day_price CHECK(day_price>0)
+    CONSTRAINT CK_transports__minute_price CHECK(minute_price>=0),
+    CONSTRAINT CK_transports__day_price CHECK(day_price>=0)
 );
 
 CREATE TABLE rent_transport_types
@@ -69,7 +69,7 @@ CREATE TABLE rent_transports
     CONSTRAINT FK_rents__user FOREIGN KEY(user_id) REFERENCES users(id),
     CONSTRAINT FK_rents__transport FOREIGN KEY(transport_id) REFERENCES transports(id),
     CONSTRAINT FK_rents__type FOREIGN KEY(type_id) REFERENCES rent_transport_types(id),
-    CONSTRAINT CK_rents__final_price CHECK(final_price>0),
-    CONSTRAINT CK_rents__price_of_unit CHECK(price_of_unit>0),
+    CONSTRAINT CK_rents__final_price CHECK(final_price>=0),
+    CONSTRAINT CK_rents__price_of_unit CHECK(price_of_unit>=0),
     CONSTRAINT CK_rents__time_start__time_end CHECK(time_start<=time_end)
 );

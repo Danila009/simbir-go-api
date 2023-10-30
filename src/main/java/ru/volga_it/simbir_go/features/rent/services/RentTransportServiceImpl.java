@@ -110,9 +110,7 @@ public class RentTransportServiceImpl implements RentTransportService {
 
         rent.setTimeEnd(LocalDateTime.now());
 
-        Double finalPrice = rent.getTransportType().getType() == RentTransportType.Days ?
-                rent.getTransport().getDayPrice() * daysBetweenInclusive(rent.getTimeStart(), rent.getTimeEnd()) :
-                rent.getTransport().getMinutePrice() * minutesBetweenInclusive(rent.getTimeStart(), rent.getTimeEnd());
+        Double finalPrice = getFinalPrice(rent);
 
         rent.setFinalPrice(finalPrice);
         rent.getUser().setBalance(rent.getUser().getBalance() - rent.getFinalPrice());
@@ -147,5 +145,12 @@ public class RentTransportServiceImpl implements RentTransportService {
     @Transactional
     public void deleteById(Long id) {
         rentTransportRepository.deleteById(id);
+    }
+
+
+    private Double getFinalPrice(RentTransportEntity rent) {
+        return rent.getTransportType().getType() == RentTransportType.Days ?
+                rent.getTransport().getDayPrice() * daysBetweenInclusive(rent.getTimeStart(), rent.getTimeEnd()) :
+                rent.getTransport().getMinutePrice() * minutesBetweenInclusive(rent.getTimeStart(), rent.getTimeEnd());
     }
 }

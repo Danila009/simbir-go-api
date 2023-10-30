@@ -1,5 +1,6 @@
 package ru.volga_it.simbir_go.features.rent;
 
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -45,9 +46,9 @@ public class RentTransportController {
     @GetMapping("Transport")
     @ResponseStatus(HttpStatus.OK)
     private List<TransportDto> getAll(
-            @RequestParam(name = "lat", required = false) Double latitude,
-            @RequestParam(name = "long", required = false) Double longitude,
-            @RequestParam(required = false) Double radius,
+            @RequestParam(name = "lat") Double latitude,
+            @RequestParam(name = "long") Double longitude,
+            @Parameter(description = "value in kilometers") Double radius,
             @RequestParam(defaultValue = "All") TransportTypeRequestParam type
     ) {
         GetTransportsRequestParams params = new GetTransportsRequestParams();

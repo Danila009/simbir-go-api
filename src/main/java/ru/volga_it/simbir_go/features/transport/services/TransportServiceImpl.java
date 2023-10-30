@@ -22,6 +22,7 @@ import ru.volga_it.simbir_go.features.transport.services.type.TransportTypeServi
 import java.util.List;
 import java.util.Objects;
 
+import static ru.volga_it.simbir_go.common.earthCalc.EarthCalc.distanceInKilometers;
 import static ru.volga_it.simbir_go.features.transport.dto.params.TransportTypeRequestParam.parseTransportType;
 
 @Service
@@ -51,8 +52,15 @@ public class TransportServiceImpl implements TransportService {
             if(params.getCanBeRented() != null)
                 isValid = transport.getCanBeRented().equals(params.getCanBeRented());
 
-            if(params.getType() != null)
-                isValid = isValid && transport.getTypeEntity().getType() == params.getType();
+            if(params.getType() != null && isValid)
+                isValid = transport.getTypeEntity().getType() == params.getType();
+
+            if(params.getLatitude() != null && params.getLongitude() != null && params.getRadius() != null && isValid) {
+                double distance = distanceInKilometers(transport. getLatitude(), transport.getLongitude(),
+                        params.getLatitude(), params.getLongitude());
+
+                isValid = distance <= params.getRadius();
+            }
 
             return isValid;
         }).toList();

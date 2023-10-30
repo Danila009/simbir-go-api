@@ -6,15 +6,15 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import ru.volga_it.simbir_go.common.exceptions.UnauthorizedException;
 import ru.volga_it.simbir_go.common.validation.OnCreate;
 import ru.volga_it.simbir_go.common.validation.OnUpdate;
 import ru.volga_it.simbir_go.features.account.services.security.UserSecurityService;
+import ru.volga_it.simbir_go.features.security.expressions.CustomSecurityExpression;
 import ru.volga_it.simbir_go.features.transport.dto.TransportDto;
 import ru.volga_it.simbir_go.features.transport.dto.params.UpdateTransportParams;
 import ru.volga_it.simbir_go.features.transport.mappers.TransportMapper;
 import ru.volga_it.simbir_go.features.transport.services.TransportService;
-
-import java.util.List;
 
 @Valid
 @RestController
@@ -25,13 +25,9 @@ public class TransportController {
     private final TransportService transportService;
     private final UserSecurityService userSecurityService;
 
-    private final TransportMapper transportMapper;
+    private final CustomSecurityExpression customSecurityExpression;
 
-    @GetMapping
-    @ResponseStatus(HttpStatus.OK)
-    private List<TransportDto> getAll() {
-        return transportMapper.toDto(transportService.getAll(null));
-    }
+    private final TransportMapper transportMapper;
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
@@ -43,16 +39,24 @@ public class TransportController {
 
     @PutMapping("{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    @SecurityRequirement(name = "bearerAuth")
     private void update(
             @PathVariable Long id,
             @Validated(OnUpdate.class) @RequestBody UpdateTransportParams params
     ) {
+        if(!customSecurityExpression.canAccessTransport(id))
+            throw new UnauthorizedException("access denied");
+
         transportService.update(id, params);
     }
 
     @DeleteMapping("{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    @SecurityRequirement(name = "bearerAuth")
     private void deleteById(@PathVariable Long id) {
+        if(!customSecurityExpression.canAccessTransport(id))
+            throw new UnauthorizedException("access denied");
+
         transportService.deletedById(id);
     }
 }

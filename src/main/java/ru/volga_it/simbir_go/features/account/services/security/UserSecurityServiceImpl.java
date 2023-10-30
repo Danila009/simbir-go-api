@@ -55,9 +55,13 @@ public class UserSecurityServiceImpl implements UserSecurityService {
     }
 
     @Override
-    public Long getUserIdByAuthentication() {
+    public JwtEntity getUserByAuthentication() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        JwtEntity user = (JwtEntity) authentication.getPrincipal();
-        return user.getId();
+        return  (JwtEntity) authentication.getPrincipal();
+    }
+
+    @Override
+    public Long getUserIdByAuthentication() {
+        return getUserByAuthentication().getId();
     }
 }

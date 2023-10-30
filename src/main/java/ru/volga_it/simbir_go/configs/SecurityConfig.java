@@ -41,7 +41,11 @@ public class SecurityConfig {
                             }));
                 })
                 .authorizeHttpRequests(config -> {
-                    config.requestMatchers("/**").permitAll()
+                    config.requestMatchers("/api/Account/SignUp").permitAll()
+                            .requestMatchers("/api/Account/SignIn").permitAll()
+                            .requestMatchers("/api/Rent/Transport").permitAll()
+                            .requestMatchers("/swagger-ui/**").permitAll()
+                            .requestMatchers("/v3/api-docs/**").permitAll()
                             .anyRequest().authenticated();
                 })
                 .anonymous(AbstractHttpConfigurer::disable)

@@ -6,6 +6,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import ru.volga_it.simbir_go.common.exceptions.UnauthorizedException;
 import ru.volga_it.simbir_go.features.account.services.security.UserSecurityService;
 import ru.volga_it.simbir_go.features.rent.dto.RentTransportDetailsUserDto;
 import ru.volga_it.simbir_go.features.rent.dto.RentTransportDto;
@@ -13,6 +14,7 @@ import ru.volga_it.simbir_go.features.rent.entities.RentTransportType;
 import ru.volga_it.simbir_go.features.rent.mappers.RentTransportDetailsUserMapper;
 import ru.volga_it.simbir_go.features.rent.mappers.RentTransportMapper;
 import ru.volga_it.simbir_go.features.rent.services.RentTransportService;
+import ru.volga_it.simbir_go.features.security.expressions.CustomSecurityExpression;
 import ru.volga_it.simbir_go.features.transport.dto.params.GetTransportsRequestParams;
 import ru.volga_it.simbir_go.features.transport.dto.TransportDto;
 import ru.volga_it.simbir_go.features.transport.entities.TransportType;
@@ -32,11 +34,13 @@ public class RentTransportController {
     private final UserSecurityService userSecurityService;
     private final TransportService transportService;
 
+    private final CustomSecurityExpression customSecurityExpression;
+
     private final RentTransportMapper rentTransportMapper;
     private final RentTransportDetailsUserMapper rentTransportDetailsUserMapper;
     private final TransportMapper transportMapper;
 
-    @GetMapping
+    @GetMapping("Transport")
     @ResponseStatus(HttpStatus.OK)
     private List<TransportDto> getAll(
             @RequestParam(name = "lat", required = false) Double latitude,
@@ -56,7 +60,11 @@ public class RentTransportController {
 
     @GetMapping("{rentId}")
     @ResponseStatus(HttpStatus.OK)
+    @SecurityRequirement(name = "bearerAuth")
     private RentTransportDetailsUserDto getById(@PathVariable Long rentId) {
+        if(!customSecurityExpression.canAccessRent(rentId))
+            throw new UnauthorizedException("access denied");
+
         return rentTransportDetailsUserMapper.toDto(rentTransportService.getById(rentId));
     }
 
@@ -72,6 +80,9 @@ public class RentTransportController {
     @ResponseStatus(HttpStatus.OK)
     @SecurityRequirement(name = "bearerAuth")
     private List<RentTransportDetailsUserDto> getTransportHistory(@PathVariable Long transportId) {
+        if(!customSecurityExpression.canAccessTransport(transportId))
+            throw new UnauthorizedException("access denied");
+
         return rentTransportDetailsUserMapper.toDto(rentTransportService.getAll(transportId, null));
     }
 
@@ -83,6 +94,9 @@ public class RentTransportController {
             @PathVariable Long transportId,
             RentTransportType type
     ) {
+        if(!customSecurityExpression.canAccessCreateNewRent(transportId))
+            throw new UnauthorizedException("access denied");
+
         Long userId = userSecurityService.getUserIdByAuthentication();
         return rentTransportMapper.toDto(rentTransportService.userNew(type, userId, transportId));
     }
@@ -95,6 +109,9 @@ public class RentTransportController {
             @RequestParam(name = "lat") Double latitude,
             @RequestParam(name = "long") Double longitude
     ) {
+        if(!customSecurityExpression.canAccessUpdateRentToEnt(rentId))
+            throw new UnauthorizedException("access denied");
+
         return rentTransportMapper.toDto(rentTransportService.userEnd(latitude, longitude, rentId));
     }
 }

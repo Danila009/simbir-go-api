@@ -37,7 +37,7 @@ public class SecurityConfig {
                             }))
                             .accessDeniedHandler(((request, response, accessDeniedException) -> {
                                 response.setStatus(HttpStatus.FORBIDDEN.value());
-                                response.getWriter().write("Unauthorized");
+                                response.getWriter().write("Forbidden");
                             }));
                 })
                 .authorizeHttpRequests(config -> {

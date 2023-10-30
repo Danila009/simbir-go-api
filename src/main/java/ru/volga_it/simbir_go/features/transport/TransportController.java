@@ -6,7 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import ru.volga_it.simbir_go.common.exceptions.UnauthorizedException;
+import ru.volga_it.simbir_go.common.exceptions.ForbiddenException;
 import ru.volga_it.simbir_go.common.validation.OnCreate;
 import ru.volga_it.simbir_go.common.validation.OnUpdate;
 import ru.volga_it.simbir_go.features.account.services.security.UserSecurityService;
@@ -45,7 +45,7 @@ public class TransportController {
             @Validated(OnUpdate.class) @RequestBody UpdateTransportParams params
     ) {
         if(!customSecurityExpression.canAccessTransport(id))
-            throw new UnauthorizedException("access denied");
+            throw new ForbiddenException("access denied");
 
         transportService.update(id, params);
     }
@@ -55,7 +55,7 @@ public class TransportController {
     @SecurityRequirement(name = "bearerAuth")
     private void deleteById(@PathVariable Long id) {
         if(!customSecurityExpression.canAccessTransport(id))
-            throw new UnauthorizedException("access denied");
+            throw new ForbiddenException("access denied");
 
         transportService.deletedById(id);
     }

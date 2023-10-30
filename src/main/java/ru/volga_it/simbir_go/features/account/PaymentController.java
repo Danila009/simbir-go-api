@@ -5,7 +5,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import ru.volga_it.simbir_go.common.exceptions.UnauthorizedException;
+import ru.volga_it.simbir_go.common.exceptions.ForbiddenException;
 import ru.volga_it.simbir_go.features.account.services.UserService;
 import ru.volga_it.simbir_go.features.security.expressions.CustomSecurityExpression;
 
@@ -24,7 +24,7 @@ public class PaymentController {
     @SecurityRequirement(name = "bearerAuth")
     private void hesoyam(@PathVariable(name = "accountId") Long userId) {
         if(!customSecurityExpression.canAccessPaymentHesoyam(userId))
-            throw new UnauthorizedException("access denied");
+            throw new ForbiddenException("access denied");
 
         userService.plusBalance(userId, 250000.0);
     }

@@ -5,6 +5,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.volga_it.simbir_go.common.exceptions.BadRequestException;
 import ru.volga_it.simbir_go.features.security.JwtEntity;
 import ru.volga_it.simbir_go.features.security.JwtTokenProvider;
 import ru.volga_it.simbir_go.features.account.dto.security.JwtRequestDto;
@@ -25,6 +26,10 @@ public class UserSecurityServiceImpl implements UserSecurityService {
         JwtResponseDto jwtResponse = new JwtResponseDto();
 
         UserEntity user = userService.getByUsername(dto.username());
+
+        if(!user.getPassword().equals(dto.password()))
+            throw new BadRequestException("Invalid password");
+
         String accessToken = jwtTokenProvider.createAccessToken(user.getId(), user.getUsername(), user.getIsAdmin());
         jwtResponse.setUserId(user.getId());
         jwtResponse.setIsAdmin(user.getIsAdmin());

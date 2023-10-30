@@ -10,7 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.volga_it.simbir_go.common.dto.PageDto;
-import ru.volga_it.simbir_go.common.exceptions.UnauthorizedException;
+import ru.volga_it.simbir_go.common.exceptions.ForbiddenException;
 import ru.volga_it.simbir_go.common.validation.OnUpdate;
 import ru.volga_it.simbir_go.features.security.expressions.CustomSecurityExpression;
 import ru.volga_it.simbir_go.features.transport.dto.TransportDetailsDto;
@@ -43,7 +43,7 @@ public class AdminTransportController {
             @RequestParam(name = "count", defaultValue = "20") @Min(1) @Max(100) Integer limit,
             @RequestParam(defaultValue = "All") TransportTypeRequestParam type
     ) {
-        if(!customSecurityExpression.hasIsAdmin()) throw new UnauthorizedException("user is not an admin");
+        if(!customSecurityExpression.hasIsAdmin()) throw new ForbiddenException("user is not an admin");
 
         Page<TransportDto> result = transportService.getAll(offset, limit, type).map(transportMapper::toDto);
         return new PageDto<>(result);
@@ -53,7 +53,7 @@ public class AdminTransportController {
     @ResponseStatus(HttpStatus.OK)
     @SecurityRequirement(name = "bearerAuth")
     private TransportDetailsDto getById(@PathVariable Long id) {
-        if(!customSecurityExpression.hasIsAdmin()) throw new UnauthorizedException("user is not an admin");
+        if(!customSecurityExpression.hasIsAdmin()) throw new ForbiddenException("user is not an admin");
 
         return transportDetailsMapper.toDto(transportService.getById(id));
     }
@@ -64,7 +64,7 @@ public class AdminTransportController {
     private TransportDto add(
             @Validated(OnUpdate.class) @RequestBody AdminCreateOrUpdateTransportParams params
     ) {
-        if(!customSecurityExpression.hasIsAdmin()) throw new UnauthorizedException("user is not an admin");
+        if(!customSecurityExpression.hasIsAdmin()) throw new ForbiddenException("user is not an admin");
 
         TransportEntity transport = params.toEntity();
         return transportMapper.toDto(transportService.add(params.getOwnerId(), transport));
@@ -77,7 +77,7 @@ public class AdminTransportController {
             @PathVariable Long id,
             @Validated(OnUpdate.class) @RequestBody AdminCreateOrUpdateTransportParams params
     ) {
-        if(!customSecurityExpression.hasIsAdmin()) throw new UnauthorizedException("user is not an admin");
+        if(!customSecurityExpression.hasIsAdmin()) throw new ForbiddenException("user is not an admin");
 
         transportService.update(id, params);
     }
@@ -86,7 +86,7 @@ public class AdminTransportController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @SecurityRequirement(name = "bearerAuth")
     private void deleteById(@PathVariable Long id) {
-        if(!customSecurityExpression.hasIsAdmin()) throw new UnauthorizedException("user is not an admin");
+        if(!customSecurityExpression.hasIsAdmin()) throw new ForbiddenException("user is not an admin");
 
         transportService.deletedById(id);
     }

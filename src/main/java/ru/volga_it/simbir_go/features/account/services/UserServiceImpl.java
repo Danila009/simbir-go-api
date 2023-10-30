@@ -1,16 +1,14 @@
 package ru.volga_it.simbir_go.features.account.services;
 
 import lombok.RequiredArgsConstructor;
-import org.apache.catalina.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.volga_it.simbir_go.common.exceptions.BadRequestException;
 import ru.volga_it.simbir_go.common.exceptions.ResourceNotFoundException;
 import ru.volga_it.simbir_go.features.account.entities.UserEntity;
 import ru.volga_it.simbir_go.features.account.repositories.UserRepository;
-
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -35,12 +33,15 @@ public class UserServiceImpl implements UserService {
     @Transactional(readOnly = true)
     public UserEntity getByUsername(String username) {
         return userRepository.findByUsername(username)
-                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("User not found by username"));
     }
 
     @Override
     @Transactional
     public UserEntity add(UserEntity user) {
+        if(userRepository.findByUsername(user.getUsername()).isPresent())
+            throw new BadRequestException("Username is busy");
+
         return userRepository.save(user);
     }
 

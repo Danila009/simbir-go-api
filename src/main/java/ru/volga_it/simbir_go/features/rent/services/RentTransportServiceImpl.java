@@ -1,9 +1,9 @@
 package ru.volga_it.simbir_go.features.rent.services;
 
 import lombok.RequiredArgsConstructor;
-import lombok.SneakyThrows;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.volga_it.simbir_go.common.exceptions.BadRequestException;
 import ru.volga_it.simbir_go.common.exceptions.ResourceNotFoundException;
 import ru.volga_it.simbir_go.features.account.entities.UserEntity;
 import ru.volga_it.simbir_go.features.account.services.UserService;
@@ -79,17 +79,16 @@ public class RentTransportServiceImpl implements RentTransportService {
     }
 
     @Override
-    @SneakyThrows
     @Transactional
     public RentTransportEntity userNew(RentTransportType type, Long userId, Long transportId) {
         TransportEntity transport = transportService.getById(transportId);
-        if(!transport.getCanBeRented()) throw new Exception("Cannot be rented out");
+        if(!transport.getCanBeRented()) throw new BadRequestException("Cannot be rented out");
 
         UserEntity user = userService.getById(userId);
 
         RentTransportTypeEntity rentTransportType = rentTransportTypeService.getByType(type);
         RentTransportEntity rent = new RentTransportEntity();
-        if(user.getBalance() <= 0) throw new Exception("User balance is less than zero");
+        if(user.getBalance() <= 0) throw new BadRequestException("User balance is less than zero");
         rent.setTransport(transport);
         rent.setUser(user);
         rent.setTransportType(rentTransportType);
@@ -97,18 +96,17 @@ public class RentTransportServiceImpl implements RentTransportService {
         rent.getTransport().setCanBeRented(false);
 
         Double priceOfUnit = type == RentTransportType.Days ? transport.getDayPrice() : transport.getMinutePrice();
-        if(priceOfUnit == null) throw new Exception("Cannot be rented out by type " + type.name());
+        if(priceOfUnit == null) throw new BadRequestException("Cannot be rented out by type " + type.name());
         rent.setPriceOfUnit(priceOfUnit);
 
         return rentTransportRepository.save(rent);
     }
 
     @Override
-    @SneakyThrows
     @Transactional
     public RentTransportEntity userEnd(Double latitude, Double longitude, Long rentId) {
         RentTransportEntity rent = getById(rentId);
-        if(rent.getTransport().getCanBeRented()) throw new Exception("Rental of transport is completed");
+        if(rent.getTransport().getCanBeRented()) throw new BadRequestException("Rental of transport is completed");
 
         rent.setTimeEnd(LocalDateTime.now());
 

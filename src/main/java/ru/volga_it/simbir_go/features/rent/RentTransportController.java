@@ -6,7 +6,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import ru.volga_it.simbir_go.common.exceptions.UnauthorizedException;
+import ru.volga_it.simbir_go.common.exceptions.ForbiddenException;
 import ru.volga_it.simbir_go.features.account.services.security.UserSecurityService;
 import ru.volga_it.simbir_go.features.rent.dto.RentTransportDetailsUserDto;
 import ru.volga_it.simbir_go.features.rent.dto.RentTransportDto;
@@ -63,7 +63,7 @@ public class RentTransportController {
     @SecurityRequirement(name = "bearerAuth")
     private RentTransportDetailsUserDto getById(@PathVariable Long rentId) {
         if(!customSecurityExpression.canAccessRent(rentId))
-            throw new UnauthorizedException("access denied");
+            throw new ForbiddenException("access denied");
 
         return rentTransportDetailsUserMapper.toDto(rentTransportService.getById(rentId));
     }
@@ -81,7 +81,7 @@ public class RentTransportController {
     @SecurityRequirement(name = "bearerAuth")
     private List<RentTransportDetailsUserDto> getTransportHistory(@PathVariable Long transportId) {
         if(!customSecurityExpression.canAccessTransport(transportId))
-            throw new UnauthorizedException("access denied");
+            throw new ForbiddenException("access denied");
 
         return rentTransportDetailsUserMapper.toDto(rentTransportService.getAll(transportId, null));
     }
@@ -95,7 +95,7 @@ public class RentTransportController {
             RentTransportType type
     ) {
         if(!customSecurityExpression.canAccessCreateNewRent(transportId))
-            throw new UnauthorizedException("access denied");
+            throw new ForbiddenException("access denied");
 
         Long userId = userSecurityService.getUserIdByAuthentication();
         return rentTransportMapper.toDto(rentTransportService.userNew(type, userId, transportId));
@@ -110,7 +110,7 @@ public class RentTransportController {
             @RequestParam(name = "long") Double longitude
     ) {
         if(!customSecurityExpression.canAccessUpdateRentToEnt(rentId))
-            throw new UnauthorizedException("access denied");
+            throw new ForbiddenException("access denied");
 
         return rentTransportMapper.toDto(rentTransportService.userEnd(latitude, longitude, rentId));
     }

@@ -7,7 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import ru.volga_it.simbir_go.common.exceptions.UnauthorizedException;
+import ru.volga_it.simbir_go.common.exceptions.ForbiddenException;
 import ru.volga_it.simbir_go.common.validation.OnCreate;
 import ru.volga_it.simbir_go.common.validation.OnUpdate;
 import ru.volga_it.simbir_go.features.rent.dto.RentTransportDto;
@@ -35,7 +35,7 @@ public class AdminRentTransportController {
     @ResponseStatus(HttpStatus.OK)
     @SecurityRequirement(name = "bearerAuth")
     private RentTransportDto getById(@PathVariable Long id) {
-        if(!customSecurityExpression.hasIsAdmin()) throw new UnauthorizedException("user is not an admin");
+        if(!customSecurityExpression.hasIsAdmin()) throw new ForbiddenException("user is not an admin");
 
         return rentTransportMapper.toDto(rentTransportService.getById(id));
     }
@@ -44,7 +44,7 @@ public class AdminRentTransportController {
     @ResponseStatus(HttpStatus.OK)
     @SecurityRequirement(name = "bearerAuth")
     private List<RentTransportDto> getUserHistory(@PathVariable Long userId) {
-        if(!customSecurityExpression.hasIsAdmin()) throw new UnauthorizedException("user is not an admin");
+        if(!customSecurityExpression.hasIsAdmin()) throw new ForbiddenException("user is not an admin");
 
         return rentTransportMapper.toDto(rentTransportService.getAll(null, userId));
     }
@@ -53,7 +53,7 @@ public class AdminRentTransportController {
     @ResponseStatus(HttpStatus.OK)
     @SecurityRequirement(name = "bearerAuth")
     private List<RentTransportDto> getTransportHistory(@PathVariable Long transportId) {
-        if(!customSecurityExpression.hasIsAdmin()) throw new UnauthorizedException("user is not an admin");
+        if(!customSecurityExpression.hasIsAdmin()) throw new ForbiddenException("user is not an admin");
 
         return rentTransportMapper.toDto(rentTransportService.getAll(transportId, null));
     }
@@ -62,7 +62,7 @@ public class AdminRentTransportController {
     @ResponseStatus(HttpStatus.CREATED)
     @SecurityRequirement(name = "bearerAuth")
     private RentTransportDto add(@Validated(OnCreate.class) @RequestBody CreateOrUpdateRentTransportParams params) {
-        if(!customSecurityExpression.hasIsAdmin()) throw new UnauthorizedException("user is not an admin");
+        if(!customSecurityExpression.hasIsAdmin()) throw new ForbiddenException("user is not an admin");
 
         return rentTransportMapper.toDto(rentTransportService.add(params));
     }
@@ -75,7 +75,7 @@ public class AdminRentTransportController {
             @RequestParam(name = "lat") Double latitude,
             @RequestParam(name = "long") Double longitude
     ) {
-        if(!customSecurityExpression.hasIsAdmin()) throw new UnauthorizedException("user is not an admin");
+        if(!customSecurityExpression.hasIsAdmin()) throw new ForbiddenException("user is not an admin");
 
         return rentTransportMapper.toDto(rentTransportService.userEnd(latitude, longitude, rentId));
     }
@@ -87,7 +87,7 @@ public class AdminRentTransportController {
             @PathVariable Long id,
             @Validated(OnUpdate.class) @RequestBody CreateOrUpdateRentTransportParams params
     ) {
-        if(!customSecurityExpression.hasIsAdmin()) throw new UnauthorizedException("user is not an admin");
+        if(!customSecurityExpression.hasIsAdmin()) throw new ForbiddenException("user is not an admin");
 
         rentTransportService.update(id, params);
     }
@@ -96,7 +96,7 @@ public class AdminRentTransportController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @SecurityRequirement(name = "bearerAuth")
     private void deleteById(@PathVariable Long rantId) {
-        if(!customSecurityExpression.hasIsAdmin()) throw new UnauthorizedException("user is not an admin");
+        if(!customSecurityExpression.hasIsAdmin()) throw new ForbiddenException("user is not an admin");
 
         rentTransportService.deleteById(rantId);
     }

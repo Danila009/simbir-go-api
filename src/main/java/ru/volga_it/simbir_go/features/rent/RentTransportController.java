@@ -17,11 +17,14 @@ import ru.volga_it.simbir_go.features.rent.services.RentTransportService;
 import ru.volga_it.simbir_go.features.security.expressions.CustomSecurityExpression;
 import ru.volga_it.simbir_go.features.transport.dto.params.GetTransportsRequestParams;
 import ru.volga_it.simbir_go.features.transport.dto.TransportDto;
+import ru.volga_it.simbir_go.features.transport.dto.params.TransportTypeRequestParam;
 import ru.volga_it.simbir_go.features.transport.entities.TransportType;
 import ru.volga_it.simbir_go.features.transport.mappers.TransportMapper;
 import ru.volga_it.simbir_go.features.transport.services.TransportService;
 
 import java.util.List;
+
+import static ru.volga_it.simbir_go.features.transport.dto.params.TransportTypeRequestParam.parseTransportType;
 
 @Valid
 @RestController
@@ -46,10 +49,10 @@ public class RentTransportController {
             @RequestParam(name = "lat", required = false) Double latitude,
             @RequestParam(name = "long", required = false) Double longitude,
             @RequestParam(required = false) Double radius,
-            @RequestParam(required = false) TransportType type
+            @RequestParam(defaultValue = "All") TransportTypeRequestParam type
     ) {
         GetTransportsRequestParams params = new GetTransportsRequestParams();
-        params.setType(type);
+        params.setType(parseTransportType(type));
         params.setRadius(radius);
         params.setLatitude(latitude);
         params.setLongitude(longitude);

@@ -5,11 +5,11 @@ import ru.volga_it.simbir_go.features.transport.entities.TransportType;
 public enum TransportTypeRequestParam {
     Car, Bike, Scooter, All;
 
-    public static TransportType parseTransportType(TransportTypeRequestParam param) throws Exception {
+    public static TransportType parseTransportType(TransportTypeRequestParam param) {
         if(param == TransportTypeRequestParam.Car) return TransportType.Car;
         if(param == TransportTypeRequestParam.Bike) return TransportType.Bike;
         if(param == TransportTypeRequestParam.Scooter) return TransportType.Scooter;
 
-        throw new Exception("Transport type request param invalid");
+        return null;
     }
 }

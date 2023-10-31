@@ -26,4 +26,7 @@ public class UserEntity {
 
     @OneToMany(mappedBy = "owner", fetch = FetchType.LAZY)
     private Collection<TransportEntity> ownerTransports;
+
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    private Collection<UserBlockedTokenKeyEntity> blockedTokenKeys;
 }

@@ -9,16 +9,23 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.volga_it.simbir_go.common.exceptions.BadRequestException;
 import ru.volga_it.simbir_go.features.account.dto.security.JwtRequestDto;
 import ru.volga_it.simbir_go.features.account.dto.security.JwtResponseDto;
+import ru.volga_it.simbir_go.features.account.entities.UserBlockedTokenKeyEntity;
 import ru.volga_it.simbir_go.features.account.entities.UserEntity;
 import ru.volga_it.simbir_go.features.account.security.JwtEntity;
 import ru.volga_it.simbir_go.features.account.security.JwtTokenProvider;
 import ru.volga_it.simbir_go.features.account.services.UserService;
+import ru.volga_it.simbir_go.features.account.services.blockedTokenKey.UserBlockedTokenKeyService;
+
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
 public class UserSecurityServiceImpl implements UserSecurityService {
 
+    private final UserBlockedTokenKeyService userBlockedTokenKeyService;
+
     private final UserService userService;
+
     private final JwtTokenProvider jwtTokenProvider;
     private final PasswordEncoder passwordEncoder;
 
@@ -59,6 +66,20 @@ public class UserSecurityServiceImpl implements UserSecurityService {
         jwtResponse.setAccessToken(accessToken);
 
         return jwtResponse;
+    }
+
+    @Override
+    @Transactional
+    public void signOut() {
+        JwtEntity jwtEntity = getUserByAuthentication();
+        UserEntity user = userService.getById(jwtEntity.getId());
+        String userTokenKey = jwtEntity.getUserTokenKey();
+        UserBlockedTokenKeyEntity userBlockedTokenKey = new UserBlockedTokenKeyEntity();
+
+        userBlockedTokenKey.setKey(UUID.fromString(userTokenKey));
+        userBlockedTokenKey.setUser(user);
+
+        userBlockedTokenKeyService.save(userBlockedTokenKey);
     }
 
     @Override

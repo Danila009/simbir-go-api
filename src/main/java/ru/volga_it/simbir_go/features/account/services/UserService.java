@@ -20,5 +20,5 @@ public interface UserService {
 
     void deleteById(Long id);
 
-    void plusBalance(Long id, Double number);
+    void plusBalance(Long id, Double sum);
 }

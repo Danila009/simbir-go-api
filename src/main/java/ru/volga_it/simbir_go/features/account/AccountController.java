@@ -46,6 +46,13 @@ public class AccountController {
         return userSecurityService.registration(dto);
     }
 
+    @PostMapping("SignOut")
+    @ResponseStatus(HttpStatus.OK)
+    @SecurityRequirement(name = "bearerAuth")
+    private void signOut() {
+        userSecurityService.signOut();
+    }
+
     @PutMapping
     @ResponseStatus(HttpStatus.OK)
     @SecurityRequirement(name = "bearerAuth")

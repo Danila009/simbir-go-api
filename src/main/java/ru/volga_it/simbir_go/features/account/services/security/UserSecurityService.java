@@ -10,6 +10,8 @@ public interface UserSecurityService {
 
     JwtResponseDto registration(JwtRequestDto dto);
 
+    void signOut();
+
     JwtEntity getUserByAuthentication();
 
     Long getUserIdByAuthentication();

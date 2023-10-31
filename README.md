@@ -4,7 +4,7 @@ You can access Swagger and see all available endpoints by visiting http://localh
 
 ## Class diagram
 
-![Class diagram](docs/class-diagram.png)
+![Class diagram](docs/class_diagram.png)
 
 ## Run app
 1. Change [application.yaml](/src/main/resources/application.yaml)

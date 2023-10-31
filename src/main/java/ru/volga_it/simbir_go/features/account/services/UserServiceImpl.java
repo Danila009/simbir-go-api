@@ -13,6 +13,8 @@ import ru.volga_it.simbir_go.features.account.dto.params.UpdateUserParams;
 import ru.volga_it.simbir_go.features.account.entities.UserEntity;
 import ru.volga_it.simbir_go.features.account.repositories.UserRepository;
 
+import java.util.Objects;
+
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
@@ -54,10 +56,12 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public void update(Long id, AdminUpdateUserParams params) {
-        if(userRepository.findByUsername(params.username()).isPresent())
+        UserEntity user = getById(id);
+
+        if(!Objects.equals(user.getUsername(), params.username()) &&
+                userRepository.findByUsername(params.username()).isPresent())
             throw new BadRequestException("Username is busy");
 
-        UserEntity user = getById(id);
         user.setPassword(passwordEncoder.encode(params.password()));
         user.setUsername(params.username());
         user.setIsAdmin(params.isAdmin());
@@ -69,10 +73,12 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public void update(Long id, UpdateUserParams params) {
-        if(userRepository.findByUsername(params.username()).isPresent())
+        UserEntity user = getById(id);
+
+        if(!Objects.equals(user.getUsername(), params.username()) &&
+                userRepository.findByUsername(params.username()).isPresent())
             throw new BadRequestException("Username is busy");
 
-        UserEntity user = getById(id);
         user.setUsername(params.username());
         user.setPassword(passwordEncoder.encode(params.password()));
     }

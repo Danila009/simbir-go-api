@@ -35,6 +35,6 @@ public class TransportEntity {
     @JoinColumn(name = "owner_id")
     private UserEntity owner;
 
-    @OneToMany(mappedBy = "transport", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "transport", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Collection<RentTransportEntity> rentTransports;
 }

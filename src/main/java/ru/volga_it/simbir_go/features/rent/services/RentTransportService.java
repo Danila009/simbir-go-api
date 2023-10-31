@@ -10,7 +10,8 @@ public interface RentTransportService {
 
     List<RentTransportEntity> getAll(
             Long transportId,
-            Long userId
+            Long userId,
+            Boolean canBeRented
     );
 
     RentTransportEntity getById(Long id);

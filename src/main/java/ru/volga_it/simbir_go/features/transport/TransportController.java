@@ -29,6 +29,12 @@ public class TransportController {
 
     private final TransportMapper transportMapper;
 
+    @GetMapping("{id}")
+    @ResponseStatus(HttpStatus.OK)
+    private TransportDto getById(@PathVariable Long id) {
+        return transportMapper.toDto(transportService.getById(id));
+    }
+
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     @SecurityRequirement(name = "bearerAuth")

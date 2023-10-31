@@ -82,9 +82,6 @@ public class TransportServiceImpl implements TransportService {
         TransportTypeEntity transportType = transportTypeService.getByType(transport.getTypeEntity().getType());
         UserEntity owner = userService.getById(ownerId);
 
-        if(transportRepository.findByIdentifier(transport.getIdentifier()).isPresent())
-            throw new BadRequestException("Identifier is busy");
-
         transport.setTypeEntity(transportType);
         transport.setOwner(owner);
 

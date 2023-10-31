@@ -8,6 +8,6 @@ import ru.volga_it.simbir_go.common.validation.OnUpdate;
 public record UserShortDto(
         Long id,
         @NotNull(message = "username must be not null", groups = {OnCreate.class, OnUpdate.class})
-        @Length(max = 64, message = "username must be smaller than 30 symbols", groups = {OnCreate.class, OnUpdate.class})
+        @Length(max = 64, message = "username must be smaller than 64 symbols", groups = {OnCreate.class, OnUpdate.class})
         String username
 ) { }

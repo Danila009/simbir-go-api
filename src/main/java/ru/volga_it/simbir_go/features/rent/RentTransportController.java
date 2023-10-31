@@ -76,7 +76,7 @@ public class RentTransportController {
     @SecurityRequirement(name = "bearerAuth")
     private List<RentTransportDto> getUserHistory() {
         Long userId = userSecurityService.getUserIdByAuthentication();
-        return rentTransportMapper.toDto(rentTransportService.getAll(null, userId));
+        return rentTransportMapper.toDto(rentTransportService.getAll(null, userId, null));
     }
 
     @GetMapping("TransportHistory/{transportId}")
@@ -86,7 +86,7 @@ public class RentTransportController {
         if(!customSecurityExpression.canAccessTransport(transportId))
             throw new ForbiddenException("access denied");
 
-        return rentTransportDetailsUserMapper.toDto(rentTransportService.getAll(transportId, null));
+        return rentTransportDetailsUserMapper.toDto(rentTransportService.getAll(transportId, null, null));
     }
 
 

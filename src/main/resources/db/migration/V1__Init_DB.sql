@@ -23,7 +23,7 @@ VALUES ('Car'), ('Bike'), ('Scooter');
 CREATE TABLE transports
 (
     id bigint GENERATED ALWAYS AS IDENTITY,
-    identifier varchar(64) UNIQUE NOT NULL,
+    identifier varchar(64) NOT NULL,
     model varchar(64) NOT NULL,
     color varchar(48) NOT NULL,
     description varchar(256),

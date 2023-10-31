@@ -46,7 +46,7 @@ public class AdminRentTransportController {
     private List<RentTransportDto> getUserHistory(@PathVariable Long userId) {
         if(!customSecurityExpression.hasIsAdmin()) throw new ForbiddenException("user is not an admin");
 
-        return rentTransportMapper.toDto(rentTransportService.getAll(null, userId));
+        return rentTransportMapper.toDto(rentTransportService.getAll(null, userId, null));
     }
 
     @GetMapping("TransportHistory/{transportId}")
@@ -55,7 +55,7 @@ public class AdminRentTransportController {
     private List<RentTransportDto> getTransportHistory(@PathVariable Long transportId) {
         if(!customSecurityExpression.hasIsAdmin()) throw new ForbiddenException("user is not an admin");
 
-        return rentTransportMapper.toDto(rentTransportService.getAll(transportId, null));
+        return rentTransportMapper.toDto(rentTransportService.getAll(transportId, null, null));
     }
 
     @PostMapping

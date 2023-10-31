@@ -16,7 +16,9 @@ import ru.volga_it.simbir_go.features.rent.services.type.RentTransportTypeServic
 import ru.volga_it.simbir_go.features.transport.entities.TransportEntity;
 import ru.volga_it.simbir_go.features.transport.services.TransportService;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.List;
 import java.util.Objects;
 
@@ -36,18 +38,22 @@ public class RentTransportServiceImpl implements RentTransportService {
     @Transactional(readOnly = true)
     public List<RentTransportEntity> getAll(
             Long transportId,
-            Long userId
+            Long userId,
+            Boolean canBeRented
     ) {
         List<RentTransportEntity> rents = rentTransportRepository.findAll();
 
         return rents.stream().filter(rent -> {
-            boolean isValid = rent.getTransport().getCanBeRented();
+            boolean isValid = true;
 
-            if(transportId != null)
+            if(canBeRented != null)
+                isValid = rent.getTransport().getCanBeRented() == canBeRented;
+
+            if(transportId != null && isValid)
                 isValid = Objects.equals(rent.getTransport().getId(), transportId);
 
-            if(userId != null)
-                isValid = isValid && Objects.equals(rent.getUser().getId(), userId);
+            if(userId != null && isValid)
+                isValid = Objects.equals(rent.getUser().getId(), userId);
 
             return isValid;
         }).toList();
@@ -106,6 +112,7 @@ public class RentTransportServiceImpl implements RentTransportService {
     @Transactional
     public RentTransportEntity userEnd(Double latitude, Double longitude, Long rentId) {
         RentTransportEntity rent = getById(rentId);
+        if(rent.getTimeEnd() != null) throw new BadRequestException("Rental is completed");
         if(rent.getTransport().getCanBeRented()) throw new BadRequestException("Rental of transport is completed");
 
         rent.setTimeEnd(LocalDateTime.now());
@@ -149,8 +156,13 @@ public class RentTransportServiceImpl implements RentTransportService {
 
 
     private Double getFinalPrice(RentTransportEntity rent) {
+        Duration duration = Duration.between(rent.getTimeStart(), rent.getTimeEnd());
+        long seconds = duration.getSeconds();
+
+        System.out.println(seconds);
+
         return rent.getTransportType().getType() == RentTransportType.Days ?
-                rent.getTransport().getDayPrice() * daysBetweenInclusive(rent.getTimeStart(), rent.getTimeEnd()) :
-                rent.getTransport().getMinutePrice() * minutesBetweenInclusive(rent.getTimeStart(), rent.getTimeEnd());
+                rent.getTransport().getDayPrice() * (seconds / 86400.0) :
+                rent.getTransport().getMinutePrice() * (seconds / 60.0);
     }
 }

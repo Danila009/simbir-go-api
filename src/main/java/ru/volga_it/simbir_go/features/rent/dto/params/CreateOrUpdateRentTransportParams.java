@@ -30,6 +30,6 @@ public record CreateOrUpdateRentTransportParams(
         @JsonProperty("priceType")
         @NotNull(message = "priceType must be not null", groups = {OnCreate.class, OnUpdate.class})
         RentTransportType type,
-        @Min(value = 0, message = "finalPrice must be greater than or equal to zero")
+        @Min(value = 0, message = "finalPrice must be greater than or equal to zero",  groups = {OnCreate.class, OnUpdate.class})
         Double finalPrice
 ) {}

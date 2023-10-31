@@ -1,5 +1,6 @@
 package ru.volga_it.simbir_go.features.transport.dto.params.admin;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
@@ -21,6 +22,7 @@ public class AdminCreateOrUpdateTransportParams {
     @NotNull(message = "canBeRented must be not null", groups = {OnCreate.class, OnUpdate.class})
     private Boolean canBeRented;
 
+    @JsonProperty("transportType")
     @NotNull(message = "type must be not null", groups = OnCreate.class)
     private TransportType type;
 
@@ -45,10 +47,10 @@ public class AdminCreateOrUpdateTransportParams {
     @NotNull(message = "longitude must be not null", groups = {OnCreate.class, OnUpdate.class})
     private Double longitude;
 
-    @Min(value = 0, message = "minutePrice must be greater than or equal to zero")
+    @Min(value = 0, message = "minutePrice must be greater than or equal to zero",  groups = {OnCreate.class, OnUpdate.class})
     private Double minutePrice;
 
-    @Min(value = 0, message = "dayPrice must be greater than or equal to zero")
+    @Min(value = 0, message = "dayPrice must be greater than or equal to zero",  groups = {OnCreate.class, OnUpdate.class})
     private Double dayPrice;
 
     public TransportEntity toEntity() {

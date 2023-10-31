@@ -1,5 +1,6 @@
 package ru.volga_it.simbir_go.features.transport.dto.params;
 
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import org.hibernate.validator.constraints.Length;
 import ru.volga_it.simbir_go.common.validation.OnCreate;
@@ -24,7 +25,9 @@ public record UpdateTransportParams(
         Double latitude,
         @NotNull(message = "longitude must be not null", groups = {OnCreate.class, OnUpdate.class})
         Double longitude,
+        @Min(value = 0, message = "minutePrice must be greater than or equal to zero")
         Double minutePrice,
+        @Min(value = 0, message = "dayPrice must be greater than or equal to zero")
         Double dayPrice
 ) {
 

@@ -1,5 +1,6 @@
 package ru.volga_it.simbir_go.features.transport.dto.params.admin;
 
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
@@ -44,8 +45,10 @@ public class AdminCreateOrUpdateTransportParams {
     @NotNull(message = "longitude must be not null", groups = {OnCreate.class, OnUpdate.class})
     private Double longitude;
 
+    @Min(value = 0, message = "minutePrice must be greater than or equal to zero")
     private Double minutePrice;
 
+    @Min(value = 0, message = "dayPrice must be greater than or equal to zero")
     private Double dayPrice;
 
     public TransportEntity toEntity() {

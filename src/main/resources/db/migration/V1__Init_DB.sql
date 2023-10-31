@@ -7,7 +7,6 @@ CREATE TABLE users
     is_admin bool NOT NULL DEFAULT false,
 
     CONSTRAINT PK_users__key PRIMARY KEY(id)
--- 	CONSTRAINT CK_users__balance CHECK(balance>=0)
 );
 
 CREATE TABLE transport_types

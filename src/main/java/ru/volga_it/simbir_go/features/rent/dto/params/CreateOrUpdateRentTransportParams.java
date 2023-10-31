@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import ru.volga_it.simbir_go.common.validation.OnCreate;
 import ru.volga_it.simbir_go.common.validation.OnUpdate;
@@ -29,5 +30,6 @@ public record CreateOrUpdateRentTransportParams(
         @JsonProperty("priceType")
         @NotNull(message = "priceType must be not null", groups = {OnCreate.class, OnUpdate.class})
         RentTransportType type,
+        @Min(value = 0, message = "finalPrice must be greater than or equal to zero")
         Double finalPrice
 ) {}

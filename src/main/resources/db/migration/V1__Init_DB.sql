@@ -72,3 +72,12 @@ CREATE TABLE rent_transports
     CONSTRAINT CK_rents__price_of_unit CHECK(price_of_unit>=0),
     CONSTRAINT CK_rents__time_start__time_end CHECK(time_start<=time_end)
 );
+
+CREATE TABLE user_blocked_token_keys
+(
+    key uuid,
+    user_id bigint NOT NULL,
+
+    CONSTRAINT PK_user_blocked_token_keys__key PRIMARY KEY(key),
+    CONSTRAINT FK_user_blocked_token_keys__user FOREIGN KEY(user_id) REFERENCES users(id)
+);

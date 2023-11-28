@@ -1,10 +1,16 @@
 spring:
+  jpa:
+    hibernate:
+      ddl-auto: none
   datasource:
     url: jdbc:postgresql://localhost:5432/simbir_go
     username: postgres
     password: ggtt1234
   autoconfigure:
     exclude: org.springframework.boot.autoconfigure.security.servlet.UserDetailsServiceAutoConfiguration
+  sql:
+    init:
+      mode: always
 security:
   jwt:
     secret: c2Zqa3NkamZranNkbGtqZmtsc2pka2ZqdmJjeHZic2JkZmJzamtkZA==
